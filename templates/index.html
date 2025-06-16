@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Grid</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data Grid</h1>
+    <table id="data-grid">
+        <thead>
+            <tr>
+                <th>Host</th>
+                <th>OS</th>
+                <th>last Seen</th>
+            </tr>
+        </thead>
+        <tbody id="data-body">
+        </tbody>
+    </table>
+
+    <script>
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById('data-body');
+                data.forEach(item => {
+                    if (!item.dnsHostName || !item.os) return; // Skip if any field is missing
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.dnsHostName}</td>
+                        <td>${item.os}</td>
+                        <td>${item.last_seen}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+    </script>
+</body>
+</html>
